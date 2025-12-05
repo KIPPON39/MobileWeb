@@ -1,36 +1,536 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Ionic App</title>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KKU Campus Guide - มหาวิทยาลัยขอนแก่น</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section - Poster Style */
+    header {
+      position: relative;
+      height: 100vh;
+      background: linear-gradient(135deg, #A73B24 0%, #8B2E1A 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 600" preserveAspectRatio="xMidYMax slice"%3E%3Cg fill="none" stroke="white" stroke-width="2" opacity="0.25"%3E%3C!-- Main Building Structure --%3E%3Cpath d="M200 400 L200 250 L400 150 L600 250 L600 400 Z"/%3E%3Cpath d="M400 150 L800 150 L1000 250 L1000 400 L600 400"/%3E%3Cpath d="M800 150 L1100 250 L1200 250 L1200 400 L1000 400"/%3E%3C!-- Roof Lines --%3E%3Cpath d="M180 250 L400 130 L820 130 L1220 250"/%3E%3Cpath d="M200 270 L400 160 L800 160 L1200 270"/%3E%3Cpath d="M220 290 L400 190 L780 190 L1180 290"/%3E%3Cpath d="M240 310 L400 220 L760 220 L1160 310"/%3E%3C!-- Windows --%3E%3Crect x="230" y="300" width="30" height="50"/%3E%3Crect x="280" y="300" width="30" height="50"/%3E%3Crect x="330" y="300" width="30" height="50"/%3E%3Crect x="380" y="300" width="30" height="50"/%3E%3Crect x="640" y="300" width="30" height="50"/%3E%3Crect x="690" y="300" width="30" height="50"/%3E%3Crect x="740" y="300" width="30" height="50"/%3E%3Crect x="790" y="300" width="30" height="50"/%3E%3Crect x="1040" y="300" width="30" height="50"/%3E%3Crect x="1090" y="300" width="30" height="50"/%3E%3Crect x="1140" y="300" width="30" height="50"/%3E%3C!-- Trees --%3E%3Ccircle cx="100" cy="350" r="40"/%3E%3Cline x1="100" y1="390" x2="100" y2="430"/%3E%3Ccircle cx="150" cy="370" r="30"/%3E%3Cline x1="150" y1="400" x2="150" y2="430"/%3E%3Ccircle cx="1280" cy="360" r="45"/%3E%3Cline x1="1280" y1="405" x2="1280" y2="430"/%3E%3Ccircle cx="1330" cy="370" r="35"/%3E%3Cline x1="1330" y1="405" x2="1330" y2="430"/%3E%3C!-- Ground --%3E%3Cline x1="0" y1="430" x2="1400" y2="430"/%3E%3Cpath d="M0 430 L200 400 L400 410 L600 400 L800 420 L1000 400 L1200 415 L1400 430" stroke-dasharray="5,5"/%3E%3C!-- Additional architectural details --%3E%3Cpath d="M600 250 L600 150"/%3E%3Cpath d="M800 250 L800 150"/%3E%3Cpath d="M400 250 L400 150"/%3E%3C/g%3E%3C/svg%3E');
+      background-size: 100% auto;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      opacity: 1;
+      z-index: 0;
+    }
+
+    #logoCanvas {
+      margin-bottom: 30px;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+      z-index: 1;
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 1;
+      animation: fadeInUp 1s ease;
+    }
+
+    h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 2px 4px 20px rgba(0,0,0,0.4);
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      font-weight: 300;
+      margin-bottom: 10px;
+      opacity: 0.95;
+    }
+
+    .student-info {
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0.85;
+      margin-top: 20px;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-indicator::after {
+      content: '↓';
+      font-size: 2rem;
+      color: white;
+      opacity: 0.7;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      40% {
+        transform: translateX(-50%) translateY(-10px);
+      }
+      60% {
+        transform: translateX(-50%) translateY(-5px);
+      }
+    }
+
+    /* Main Content Section */
+    main {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      color: #A73B24;
+      margin-bottom: 60px;
+      font-weight: 600;
+    }
+
+    /* Grid Layout for Places */
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin-bottom: 100px;
+    }
+
+    .place-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(167, 59, 36, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .place-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(167, 59, 36, 0.2);
+    }
+
+    .place-images {
+      display: flex;
+      gap: 5px;
+      height: 250px;
+    }
+
+    .place-images img {
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .place-images img:hover {
+      transform: scale(1.05);
+    }
+
+    .place-content {
+      padding: 25px;
+    }
+
+    .place-number {
+      display: inline-block;
+      background: #A73B24;
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 35px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .place-title {
+      font-size: 1.5rem;
+      color: #A73B24;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .place-description {
+      color: #555;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: linear-gradient(135deg, #A73B24 0%, #8B2E1A 100%);
+      padding: 80px 20px;
+      margin-top: 100px;
+    }
+
+    .form-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 50px;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .form-title {
+      font-size: 2rem;
+      color: #A73B24;
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      color: #333;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 1.05rem;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: 'Kanit', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #A73B24;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: #A73B24;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: 'Kanit', sans-serif;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background: #8B2E1A;
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: #2c2c2c;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      font-weight: 300;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+      }
+
+      .places-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .form-container {
+        padding: 35px 25px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      header::before {
+        background-size: 150% auto;
+        background-position: center bottom;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .place-images {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .place-images img {
+        width: 100%;
+        height: 180px;
+      }
+
+      header::before {
+        background-size: 200% auto;
+        background-position: center bottom;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <header>
+    <canvas id="logoCanvas" width="180" height="180"></canvas>
+    <div class="hero-content">
+      <h1>KKU CAMPUS GUIDE</h1>
+      <p class="subtitle">จัดทำโดย นายวิสิษฎ์ ศรีอดิศักดิ์ | รหัส 663380234-8</p>
+    </div>
+    <div class="scroll-indicator"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <h2 class="section-title">สถานที่แนะนำภายในมหาวิทยาลัยขอนแก่น</h2>
     
-    <base href="/" />
+    <section class="places-grid">
+      <!-- Place 1 -->
+      <article class="place-card">
+        <div class="place-images">
+          <img src="https://t1.blockdit.com/photos/2023/04/644ce2e955f34315bcb9babc_800x0xcover_lY8cerIu.jpg" alt="บึงสีฐาน 1">
+          <img src="https://cms.dmpcdn.com/ugcarticle/2019/09/10/ad4e2800-4904-11ec-83ac-3fa6cc0a57f3_original.jpg" alt="บึงสีฐาน 2">
+        </div>
+        <div class="place-content">
+          <span class="place-number">1</span>
+          <h3 class="place-title">บึงสีฐาน</h3>
+          <p class="place-description">แหล่งพักผ่อนยอดนิยมในมหาวิทยาลัยขอนแก่น มีบรรยากาศที่ร่มรื่นและสวยงาม เหมาะสำหรับการเดินเล่น นั่งชิลล์ริมบึง และออกกำลังกายในยามเช้าหรือเย็น เป็นจุดนัดพบและถ่ายรูปที่ชื่นชอบของนักศึกษา</p>
+        </div>
+      </article>
+
+      <!-- Place 2 -->
+      <article class="place-card">
+        <div class="place-images">
+          <img src="https://www.kku.ac.th/wp-content/uploads/2019/11/73388389_1126681251015692_3940284704808239104_o.jpg" alt="ศาลเจ้าพ่อมอดดินแดง 1">
+          <img src="https://www.kku.ac.th/wp-content/uploads/2022/11/3K7A3913-scaled.jpg" alt="ศาลเจ้าพ่อมอดดินแดง 2">
+        </div>
+        <div class="place-content">
+          <span class="place-number">2</span>
+          <h3 class="place-title">ศาลเจ้าพ่อมอดดินแดง</h3>
+          <p class="place-description">สถานที่ศักดิ์สิทธิ์ที่เป็นที่เคารพของนักศึกษาและบุคลากร มข. เหมาะสำหรับการขอพรให้การเรียนราบรื่น สอบผ่าน และเสริมความเป็นสิริมงคลในชีวิต เป็นสถานที่ที่มีความสำคัญทางจิตใจของชาว มข.</p>
+        </div>
+      </article>
+
+      <!-- Place 3 -->
+      <article class="place-card">
+        <div class="place-images">
+          <img src="https://www.kku.ac.th/wp-content/uploads/2023/12/IMG_0832-scaled.jpg" alt="สวนเกษตร มข. 1">
+          <img src="https://ddq1mzvkg4fn7.cloudfront.net/2023/09/----------1.jpg" alt="สวนเกษตร มข. 2">
+        </div>
+        <div class="place-content">
+          <span class="place-number">3</span>
+          <h3 class="place-title">สวนเกษตร มข.</h3>
+          <p class="place-description">ตลาดเย็นยอดนิยมที่เปิดทุกวันอังคารและศุกร์ มีสินค้าเกษตรอินทรีย์ อาหารพื้นบ้าน ผักผลไม้สดใหม่ และกิจกรรมชุมชนต่างๆ ในบรรยากาศที่เป็นกันเอง เป็นแหล่งช้อปปิ้งสินค้าคุณภาพดีในราคาเป็นมิตร</p>
+        </div>
+      </article>
+
+      <!-- Place 4 -->
+      <article class="place-card">
+        <div class="place-images">
+          <img src="https://pbs.twimg.com/media/DtPkAwqVAAAI8xH.jpg" alt="หอสมุด มข. 1">
+          <img src="https://library.kku.ac.th/wp-content/uploads/2023/06/2222-1024x576.png" alt="หอสมุด มข. 2">
+        </div>
+        <div class="place-content">
+          <span class="place-number">4</span>
+          <h3 class="place-title">หอสมุด มหาวิทยาลัยขอนแก่น</h3>
+          <p class="place-description">ศูนย์รวมความรู้และแหล่งเรียนรู้ที่ทันสมัย มีหนังสือและทรัพยากรการเรียนรู้มากมาย พื้นที่อ่านหนังสือที่เงียบสงบ ห้องศึกษากลุ่ม และเทคโนโลยีที่ทันสมัยสำหรับสนับสนุนการเรียนการสอนของนักศึกษา</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Form Section -->
+  <section class="form-section">
+    <div class="form-container">
+      <h2 class="form-title">แนะนำสถานที่ใหม่</h2>
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        
+        <div class="form-group">
+          <label for="placeName">ชื่อสถานที่ *</label>
+          <input type="text" id="placeName" name="place_name" required placeholder="เช่น ห้องสมุด, คณะวิศวกรรมศาสตร์">
+        </div>
+
+        <div class="form-group">
+          <label for="description">รายละเอียด *</label>
+          <textarea id="description" name="description" required placeholder="บอกเล่าเกี่ยวกับสถานที่นี้..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="imageUrl1">URL ภาพที่ 1 *</label>
+          <input type="url" id="imageUrl1" name="image_url_1" required placeholder="https://example.com/image1.jpg">
+        </div>
+
+        <div class="form-group">
+          <label for="imageUrl2">URL ภาพที่ 2 *</label>
+          <input type="url" id="imageUrl2" name="image_url_2" required placeholder="https://example.com/image2.jpg">
+        </div>
+
+        <button type="submit" class="submit-btn">ส่งข้อมูล</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>จัดทำโดย นายวิสิษฎ์ ศรีอดิศักดิ์ | รหัสนักศึกษา 663380234-8</p>
+  </footer>
+
+  <!-- Canvas Animation Script -->
+<script>
+  const canvas = document.getElementById('logoCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  let rotation = 0;
+  let scale = 1;
+  let growing = true;
+
+  function drawLogo() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    <meta name="color-scheme" content="light dark" />
-    <meta
-      name="viewport"
-      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
     
-    <link rel="manifest" href="/manifest.json" />
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotation);
+    ctx.scale(scale, scale);
     
-    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    // Outer ring
+    ctx.beginPath();
+    ctx.arc(0, 0, 70, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
     
-    <!-- add to homescreen for ios -->
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Ionic App" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <script type="module" crossorigin src="/assets/index-jiDHHWpj.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DMIxW6dp.css">
-    <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();if(location.protocol!="file:"){window.__vite_is_modern_browser=true}</script>
-    <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
-    <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy-DT63ux6c.js"></script>
-    <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/index-legacy-ByfB6CT1.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
-  </body>
+    // Main circle
+    ctx.beginPath();
+    ctx.arc(0, 0, 55, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    
+    // Inner colored circle
+    ctx.beginPath();
+    ctx.arc(0, 0, 50, 0, Math.PI * 2);
+    ctx.fillStyle = '#A73B24';
+    ctx.fill();
+    
+    ctx.restore(); // ปิดการหมุนก่อนวาดข้อความ
+    
+    // Text (ไม่หมุน)
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.scale(scale, scale); // ใช้แค่ scale เพื่อให้ขยายตามจังหวะ
+    
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 22px Kanit';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('KKU', 0, -10);
+    ctx.font = '16px Kanit';
+    ctx.fillText('GUIDE', 0, 12);
+    
+    ctx.restore();
+    
+    // Orbiting particles
+    for (let i = 0; i < 4; i++) {
+      const angle = rotation * 2 + (i * Math.PI / 2);
+      const x = centerX + Math.cos(angle) * 80;
+      const y = centerY + Math.sin(angle) * 80;
+      
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.fill();
+    }
+    
+    // Animation updates
+    rotation += 0.015;
+    
+    if (growing) {
+      scale += 0.002;
+      if (scale > 1.05) growing = false;
+    } else {
+      scale -= 0.002;
+      if (scale < 0.95) growing = true;
+    }
+    
+    requestAnimationFrame(drawLogo);
+  }
+  
+  drawLogo();
+</script>
+</body>
 </html>
