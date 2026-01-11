@@ -1,16 +1,284 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>App Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: white;
+            color: #333;
+            padding: 50px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid #333;
+        }
+
+        .btn:hover {
+            background: #000;
+            border-color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .screenshot-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .screenshot-item:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .screenshot-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-in;
+        }
+
+        .screenshot-item:hover .screenshot-overlay {
+            opacity: 1;
+        }
+
+        .zoom-text {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -35px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            font-weight: 300;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ccc;
+        }
+
+        footer {
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .screenshots {
+                grid-template-columns: 1fr;
+            }
+
+            .close-btn {
+                top: -40px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <div class="lab-buttons">
-        <a href="/MobileWeb/appdemo/app-debug.apk" class="btn btn-primary" target="_blank">App Demo APK</a>
+    <div class="container">
+        <div class="header">
+            <h1>App Demo</h1>
+        </div>
+
+        <div class="download-section">
+            <a href="/MobileWeb/appdemo/app-debug.apk" class="btn" download>ดาวน์โหลด APK</a>
+        </div>
+
+        <div class="screenshots">
+            <div class="screenshot-item">
+                <img src="../docs/appdemo/Screenshot_11-1-2026_215935_localhost.jpeg" alt="Screenshot 1">
+                <div class="screenshot-overlay">
+                    <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
+                </div>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="../docs/appdemo/Screenshot_20260111_225343.png" alt="Screenshot 2">
+                <div class="screenshot-overlay">
+                    <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
+                </div>
+            </div>
+
+            <div class="screenshot-item">
+                <img src="../docs/appdemo/Screenshot_11-1-2026_215935_localhost.jpeg" alt="Screenshot 3">
+                <div class="screenshot-overlay">
+                    <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
+                </div>
+            </div>
+        </div>
     </div>
-    <img src="../docs/appdemo/Screenshot_11-1-2026_215935_localhost.jpeg" alt="">
-    <img src="../docs/appdemo/Screenshot_20260111_225343.png" alt="">
-    <img src="../docs/appdemo/Screenshot_11-1-2026_215935_localhost.jpeg" alt="">
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <img id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+
+    <script>
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeBtn = document.querySelector('.close-btn');
+        const screenshotItems = document.querySelectorAll('.screenshot-item');
+
+        screenshotItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                modalImage.src = img.src;
+                modal.classList.add('active');
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
