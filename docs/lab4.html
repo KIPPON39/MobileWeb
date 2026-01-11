@@ -132,6 +132,8 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
             animation: fadeIn 0.3s;
+            padding: 20px;
+            overflow: auto;
         }
 
         .modal.active {
@@ -146,8 +148,8 @@
         }
 
         .modal-content {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 600px;
+            max-height: 80vh;
             position: relative;
             animation: slideIn 0.3s;
         }
@@ -165,13 +167,16 @@
 
         .modal-content img {
             max-width: 100%;
-            max-height: 100%;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
             border-radius: 8px;
+            display: block;
         }
 
         .close-btn {
             position: absolute;
-            top: -35px;
+            top: -40px;
             right: 0;
             color: white;
             font-size: 2rem;
@@ -201,8 +206,33 @@
                 grid-template-columns: 1fr;
             }
 
+            .modal-content {
+                max-width: 95vw;
+                max-height: 70vh;
+            }
+
+            .modal-content img {
+                max-height: 70vh;
+            }
+
             .close-btn {
                 top: -40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                max-width: 100vw;
+                max-height: 60vh;
+            }
+
+            .modal-content img {
+                max-height: 60vh;
+            }
+
+            .close-btn {
+                top: -35px;
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -220,28 +250,28 @@
 
         <div class="screenshots">
             <div class="screenshot-item">
-                <img src="Screenshot_11-1-2026_215935_localhost.jpeg" alt="Screenshot 1">
+                <img src="sc1.jpeg" alt="Screenshot 1">
                 <div class="screenshot-overlay">
                     <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
                 </div>
             </div>
 
             <div class="screenshot-item">
-                <img src="Screenshot_20260111_225343.png" alt="Screenshot 2">
+                <img src="sc2.png" alt="Screenshot 2">
                 <div class="screenshot-overlay">
                     <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
                 </div>
             </div>
 
             <div class="screenshot-item">
-                <img src="Screenshot_11-1-2026_215935_localhost.jpeg" alt="Screenshot 3">
+                <img src="sc3.jpeg" alt="Screenshot 3">
                 <div class="screenshot-overlay">
                     <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
                 </div>
             </div>
 
             <div class="screenshot-item">
-                <img src="Screenshot_2026-01-11_232249.png" alt="Screenshot 4">
+                <img src="sc4.jpeg" alt="Screenshot 4">
                 <div class="screenshot-overlay">
                     <span class="zoom-text">คลิกเพื่อดูเต็มจอ</span>
                 </div>
