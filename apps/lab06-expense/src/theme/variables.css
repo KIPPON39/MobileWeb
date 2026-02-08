@@ -1,0 +1,153 @@
+/* For information on how to create your own theme, please refer to:
+http://ionicframework.com/docs/theming/ */
+/* Ionic Variables and Theming */
+/* ใส่ไฟล์นี้ใน src/theme/variables.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* ฟอนต์หลัก */
+  --ion-font-family: 'Kanit', sans-serif;
+
+  /* สีหลัก - โทนส้ม */
+  --ion-color-primary: #e46c32;
+  --ion-color-primary-rgb: 228, 108, 50;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #c95e2c;
+  --ion-color-primary-tint: #e77b47;
+
+  /* สีรอง - โทนเขียว */
+  --ion-color-secondary: #5eb298;
+  --ion-color-secondary-rgb: 94, 178, 152;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #539d86;
+  --ion-color-secondary-tint: #6ebaa2;
+
+  /* สีเสริม - โทนม่วงน้ำเงิน */
+  --ion-color-tertiary: #6e7aaa;
+  --ion-color-tertiary-rgb: 110, 122, 170;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #616b95;
+  --ion-color-tertiary-tint: #7d87b3;
+
+  /* สีสำเร็จ - โทนเขียว */
+  --ion-color-success: #5eb298;
+  --ion-color-success-rgb: 94, 178, 152;
+  --ion-color-success-contrast: #ffffff;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
+  --ion-color-success-shade: #539d86;
+  --ion-color-success-tint: #6ebaa2;
+
+  /* สีคำเตือน - โทนส้ม */
+  --ion-color-warning: #e46c32;
+  --ion-color-warning-rgb: 228, 108, 50;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #c95e2c;
+  --ion-color-warning-tint: #e77b47;
+
+  /* สีอันตราย - โทนแดง */
+  --ion-color-danger: #b24342;
+  --ion-color-danger-rgb: 178, 67, 66;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #9d3b3a;
+  --ion-color-danger-tint: #ba5655;
+
+  /* สีเข้ม */
+  --ion-color-dark: #5f4256;
+  --ion-color-dark-rgb: 95, 66, 86;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #543a4c;
+  --ion-color-dark-tint: #6f5567;
+
+  /* สีกลาง */
+  --ion-color-medium: #92949c;
+  --ion-color-medium-rgb: 146, 148, 156;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #808289;
+  --ion-color-medium-tint: #9d9fa6;
+
+  /* สีสว่าง */
+  --ion-color-light: #f4f5f8;
+  --ion-color-light-rgb: 244, 245, 248;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #d7d8da;
+  --ion-color-light-tint: #f5f6f9;
+
+  /* พื้นหลัง */
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+
+  --ion-text-color: #5f4256;
+  --ion-text-color-rgb: 95, 66, 86;
+
+  /* Border Radius */
+  --ion-border-radius: 12px;
+}
+
+/* Dark Mode (Optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-color-primary: #e77b47;
+    --ion-color-primary-rgb: 231, 123, 71;
+    
+    --ion-color-secondary: #6ebaa2;
+    --ion-color-secondary-rgb: 110, 186, 162;
+    
+    --ion-background-color: #1a1a1a;
+    --ion-background-color-rgb: 26, 26, 26;
+    
+    --ion-text-color: #ffffff;
+    --ion-text-color-rgb: 255, 255, 255;
+    
+    --ion-card-background: #2a2a2a;
+  }
+}
+
+/* Global Styles */
+* {
+  font-family: 'Kanit', sans-serif !important;
+}
+
+ion-title {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+}
+
+ion-button {
+  font-family: 'Kanit', sans-serif;
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+ion-label {
+  font-family: 'Kanit', sans-serif;
+}
+
+/* Toast Styling */
+.custom-toast {
+  --background: linear-gradient(135deg, #e46c32 0%, #5eb298 100%);
+  --color: white;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 500;
+}
+
+/* Alert Styling */
+.custom-alert {
+  font-family: 'Kanit', sans-serif;
+}
+
+.custom-alert .alert-head {
+  font-weight: 600;
+}
+
+.custom-alert .alert-button {
+  font-family: 'Kanit', sans-serif;
+}
