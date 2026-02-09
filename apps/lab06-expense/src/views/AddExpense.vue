@@ -87,18 +87,15 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import {
+import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
-  IonItem, IonInput, IonSelect, IonSelectOption,
+  IonItem, IonInput, IonSelect, IonSelectOption, 
   IonTextarea, IonButton, IonButtons, IonBackButton,
   IonIcon, useIonRouter, toastController
 } from "@ionic/vue";
-
-import { database } from "@/firebase";
-import { ref as dbRef, push } from "firebase/database"; 
-
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 import { saveOutline } from "ionicons/icons";
-
 
 const router = useIonRouter();
 
@@ -110,37 +107,36 @@ const note = ref("");
 
 const saveExpense = async () => {
   try {
-    await push(dbRef(database, "expenses"), {
+    await addDoc(collection(db, "expenses"), {
       title: title.value,
       amount: Number(amount.value),
       type: type.value,
       category: category.value,
       note: note.value,
-      createdAt: Date.now() // 🔥 Realtime นิยมใช้ timestamp
+      createdAt: new Date()
     });
 
     const toast = await toastController.create({
-      message: "บันทึกข้อมูลเรียบร้อย",
+      message: 'บันทึกข้อมูลเรียบร้อย',
       duration: 2000,
-      color: "success",
-      position: "top"
+      color: 'success',
+      position: 'top'
     });
     await toast.present();
 
     router.push("/tabs/tab1");
   } catch (error) {
-    console.error("Error adding expense:", error);
-
+    console.error("Error adding document: ", error);
+    
     const toast = await toastController.create({
-      message: "เกิดข้อผิดพลาดในการบันทึก",
+      message: 'เกิดข้อผิดพลาดในการบันทึก',
       duration: 2000,
-      color: "danger",
-      position: "top"
+      color: 'danger',
+      position: 'top'
     });
     await toast.present();
   }
 };
-
 </script>
 
 <style scoped>

@@ -100,17 +100,14 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
-  IonItem, IonInput, IonSelect, IonSelectOption,
+  IonItem, IonInput, IonSelect, IonSelectOption, 
   IonTextarea, IonButton, IonButtons, IonBackButton,
-  IonIcon, IonSpinner, useIonRouter,
+  IonIcon, IonSpinner, useIonRouter, 
   alertController, toastController
 } from "@ionic/vue";
-
-import { database } from "@/firebase";
-import { ref as dbRef, get, update, remove } from "firebase/database";
-
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 import { saveOutline, trashOutline } from "ionicons/icons";
-
 
 const route = useRoute();
 const router = useIonRouter();
@@ -127,12 +124,11 @@ const expenseId = route.params.id as string;
 // โหลดข้อมูล
 onMounted(async () => {
   try {
-    const snapshot = await get(
-      dbRef(database, `expenses/${expenseId}`)
-    );
+    const docRef = doc(db, "expenses", expenseId);
+    const docSnap = await getDoc(docRef);
 
-    if (snapshot.exists()) {
-      const data = snapshot.val();
+    if (docSnap.exists()) {
+      const data = docSnap.data();
       title.value = data.title;
       amount.value = data.amount;
       type.value = data.type;
@@ -140,74 +136,85 @@ onMounted(async () => {
       note.value = data.note || "";
     } else {
       const toast = await toastController.create({
-        message: "ไม่พบข้อมูล",
+        message: 'ไม่พบข้อมูล',
         duration: 2000,
-        color: "danger",
-        position: "top"
+        color: 'danger',
+        position: 'top'
       });
       await toast.present();
       router.push("/tabs/tab1");
     }
   } catch (error) {
-    console.error("Error loading data:", error);
+    console.error("Error loading document: ", error);
   } finally {
     loading.value = false;
   }
 });
 
-
 // อัปเดตข้อมูล
 const updateExpense = async () => {
   try {
-    await update(
-      dbRef(database, `expenses/${expenseId}`),
-      {
-        title: title.value,
-        amount: Number(amount.value),
-        type: type.value,
-        category: category.value,
-        note: note.value,
-        updatedAt: Date.now()
-      }
-    );
+    const docRef = doc(db, "expenses", expenseId);
+    await updateDoc(docRef, {
+      title: title.value,
+      amount: Number(amount.value),
+      type: type.value,
+      category: category.value,
+      note: note.value,
+      updatedAt: new Date()
+    });
 
     const toast = await toastController.create({
-      message: "อัปเดตข้อมูลเรียบร้อย",
+      message: 'อัปเดตข้อมูลเรียบร้อย',
       duration: 2000,
-      color: "success",
-      position: "top"
+      color: 'success',
+      position: 'top'
     });
     await toast.present();
 
     router.push("/tabs/tab1");
   } catch (error) {
-    console.error("Error updating expense:", error);
-
+    console.error("Error updating document: ", error);
+    
     const toast = await toastController.create({
-      message: "เกิดข้อผิดพลาดในการอัปเดต",
+      message: 'เกิดข้อผิดพลาดในการอัปเดต',
       duration: 2000,
-      color: "danger",
-      position: "top"
+      color: 'danger',
+      position: 'top'
     });
     await toast.present();
   }
 };
 
+// ยืนยันการลบ
+const confirmDelete = async () => {
+  const alert = await alertController.create({
+    header: 'ยืนยันการลบ',
+    message: 'คุณต้องการลบรายการนี้ใช่หรือไม่? การลบข้อมูลไม่สามารถย้อนกลับได้',
+    buttons: [
+      {
+        text: 'ยกเลิก',
+        role: 'cancel',
+        cssClass: 'secondary'
+      },
+      {
+        text: 'ลบ',
+        role: 'destructive',
+        handler: () => {
+          deleteExpense();
+        }
+      }
+    ]
+  });
 
-const confirmDelete = () => {
-  if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
-    deleteExpense();
-  }
+  await alert.present();
 };
-
-
 
 // ลบข้อมูล
 const deleteExpense = async () => {
   try {
-    await remove(
-      dbRef(database, `expenses/${expenseId}`)
-    );
+    const docRef = doc(db, "expenses", expenseId);
+    await deleteDoc(docRef);
 
     const toast = await toastController.create({
       message: 'ลบข้อมูลเรียบร้อย',
@@ -219,8 +226,8 @@ const deleteExpense = async () => {
 
     router.push("/tabs/tab1");
   } catch (error) {
-    console.error("Error deleting expense:", error);
-
+    console.error("Error deleting document: ", error);
+    
     const toast = await toastController.create({
       message: 'เกิดข้อผิดพลาดในการลบ',
       duration: 2000,
@@ -230,7 +237,6 @@ const deleteExpense = async () => {
     await toast.present();
   }
 };
-
 </script>
 
 <style scoped>

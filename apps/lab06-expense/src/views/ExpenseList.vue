@@ -89,36 +89,12 @@ import {
   IonButtons, IonCard, IonCardContent, IonGrid, IonRow, IonCol,
   useIonRouter
 } from "@ionic/vue";
+import { collection, onSnapshot, query, orderBy, Unsubscribe } from "firebase/firestore";
+import { db } from "@/firebase";
 import {
-  addCircleOutline,
-  arrowUpCircleOutline,
-  arrowDownCircleOutline,
-  arrowUpCircle,
-  arrowDownCircle,
-  walletOutline
+  addCircleOutline, arrowUpCircle, arrowDownCircle,
+  arrowUpCircleOutline, arrowDownCircleOutline, walletOutline
 } from "ionicons/icons";
-
-
-import { database } from "@/firebase";
-import {
-  ref as dbRef,
-  onValue,
-  off,
-  query,
-  orderByChild
-} from "firebase/database";
-
-const formatDate = (timestamp: number) => {
-  if (!timestamp) return '';
-
-  const d = new Date(timestamp);
-
-  return d.toLocaleDateString('th-TH', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-};
 
 const router = useIonRouter();
 
@@ -129,11 +105,11 @@ interface Expense {
   type: string;
   category: string;
   note: string;
-  createdAt: number; 
+  createdAt: any;
 }
 
-
 const expenses = ref<Expense[]>([]);
+let unsubscribe: Unsubscribe | null = null;
 
 // คำนวณยอดรวม
 const totalIncome = computed(() => {
@@ -160,6 +136,16 @@ const formatCurrency = (amount: number) => {
   }) + ' ฿';
 };
 
+const formatDate = (date: any) => {
+  if (!date) return '';
+  const d = date.toDate ? date.toDate() : new Date(date);
+  return d.toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
 const goToAdd = () => {
   router.push('/add-expense');
 };
@@ -169,37 +155,22 @@ const goToEdit = (id: string) => {
 };
 
 // ดึงข้อมูลแบบ Realtime
-let expensesRef: any = null;
-
 onMounted(() => {
-  expensesRef = query(
-    dbRef(database, "expenses"),
-    orderByChild("createdAt")
-  );
-
-  onValue(expensesRef, (snapshot) => {
-    const data = snapshot.val();
-
-    if (!data) {
-      expenses.value = [];
-      return;
-    }
-
-    expenses.value = Object.entries(data)
-      .map(([id, value]: any) => ({
-        id,
-        ...value
-      }))
-      .sort((a, b) => b.createdAt - a.createdAt); // ใหม่ → เก่าสุดล่าง
+  const q = query(collection(db, "expenses"), orderBy("createdAt", "desc"));
+  
+  unsubscribe = onSnapshot(q, (snapshot) => {
+    expenses.value = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Expense));
   });
 });
 
 onUnmounted(() => {
-  if (expensesRef) {
-    off(expensesRef);
+  if (unsubscribe) {
+    unsubscribe();
   }
 });
-
 </script>
 
 <style scoped>
