@@ -22,3 +22,4 @@ logs/
 .vite/
 *.local
 apps/lab07-authen/android/app/google-services.json
+apps/lab08-ai/android/app/google-services.json
