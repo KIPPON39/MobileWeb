@@ -21,3 +21,4 @@ logs/
 .capacitor/
 .vite/
 *.local
+apps/lab07-authen/android/app/google-services.json
